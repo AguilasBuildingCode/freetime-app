@@ -1,7 +1,7 @@
 // components/auth/RegisterForm.tsx
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { RegisterOptions, useForm } from 'react-hook-form';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 import { isValidEmail, isValidPassword } from '@/utils/validatios';
@@ -18,7 +18,19 @@ type InputConfig = {
     id: keyof FormData;
     label: string;
     type?: string;
-    validation: any;
+    // validation: {
+    //     required?: string,
+    //     minLength?: {
+    //         value: number,
+    //         message: string,
+    //     },
+    //     maxLength?: {
+    //         value: number,
+    //         message: string,
+    //     },
+    //     validate?: (value: string) => boolean | string
+    // };
+    validation: RegisterOptions<FormData, keyof FormData>
 };
 
 const RegisterForm = () => {
@@ -57,7 +69,12 @@ const RegisterForm = () => {
             type: 'email',
             validation: {
                 required: 'El correo es requerido',
-                validate: (email: string) => isValidEmail(email) || 'Correo electrónico inválido',
+                validate: (email) => {
+                    if (typeof email === "boolean") {
+                        return email
+                    }
+                    return isValidEmail(email) || 'Correo electrónico inválido'
+                },
             }
         },
         {
@@ -70,7 +87,12 @@ const RegisterForm = () => {
                     value: 8,
                     message: 'Mínimo 8 caracteres'
                 },
-                validate: (password: string) => isValidPassword(password) || 'Debe contener mayúsculas, minúsculas y números',
+                validate: (password) => {
+                    if (typeof password === 'boolean') {
+                        return password
+                    }
+                    return isValidPassword(password) || 'Debe contener mayúsculas, minúsculas y números'
+                },
             }
         },
         {
@@ -79,7 +101,7 @@ const RegisterForm = () => {
             type: 'password',
             validation: {
                 required: 'Confirma tu contraseña',
-                validate: (value: string) => value === password || 'Las contraseñas no coinciden'
+                validate: (value) => value === password || 'Las contraseñas no coinciden'
             }
         }
     ];
@@ -99,7 +121,7 @@ const RegisterForm = () => {
                     type={type}
                     label={label}
                     error={errors[id]?.message}
-                    {...register(id, validation)}
+                    {...register(id, {...validation})}
                 />
             ))}
 
