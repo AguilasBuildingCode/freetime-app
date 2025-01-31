@@ -15,10 +15,23 @@ const Button = ({
     children,
     ...props
 }: ButtonProps) => {
+    const baseStyles = 'flex items-center justify-center rounded-lg font-medium transition-colors';
+
     const variants = {
-        primary: 'bg-blue-600 text-white hover:bg-blue-700',
-        secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300',
-        ghost: 'bg-transparent text-gray-700 hover:bg-gray-50'
+        primary: `bg-blue-600 text-white 
+              hover:bg-blue-700 
+              disabled:bg-gray-400 disabled:text-gray-200 
+              disabled:hover:bg-gray-400 disabled:pointer-events-none`,
+
+        secondary: `bg-gray-200 text-gray-900 
+                hover:bg-gray-300 
+                disabled:bg-gray-400 disabled:text-gray-200 
+                disabled:hover:bg-gray-400 disabled:pointer-events-none`,
+
+        ghost: `bg-transparent text-gray-700 
+            hover:bg-gray-50 
+            disabled:text-gray-400 
+            disabled:hover:bg-transparent disabled:pointer-events-none`
     };
 
     const sizes = {
@@ -29,9 +42,12 @@ const Button = ({
 
     return (
         <button
-            className={`flex items-center justify-center rounded-lg font-medium transition-colors ${variants[variant]} ${sizes[size]} ${className} ${isLoading ? 'opacity-70 cursor-not-allowed' : ''
-                }`}
-            disabled={isLoading}
+            className={`${baseStyles} 
+                  ${variants[variant]} 
+                  ${sizes[size]} 
+                  ${isLoading ? 'opacity-70 cursor-wait' : ''}
+                  ${className}`}
+            disabled={isLoading || props.disabled}
             {...props}
         >
             {isLoading ? (

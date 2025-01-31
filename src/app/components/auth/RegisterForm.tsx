@@ -18,18 +18,6 @@ type InputConfig = {
     id: keyof FormData;
     label: string;
     type?: string;
-    // validation: {
-    //     required?: string,
-    //     minLength?: {
-    //         value: number,
-    //         message: string,
-    //     },
-    //     maxLength?: {
-    //         value: number,
-    //         message: string,
-    //     },
-    //     validate?: (value: string) => boolean | string
-    // };
     validation: RegisterOptions<FormData, keyof FormData>
 };
 
@@ -121,7 +109,7 @@ const RegisterForm = () => {
                     type={type}
                     label={label}
                     error={errors[id]?.message}
-                    {...register(id, {...validation})}
+                    {...register(id, { ...validation })}
                 />
             ))}
 
