@@ -1,10 +1,13 @@
 // components/auth/RegisterForm.tsx
 'use client';
 
-import { RegisterOptions, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import Button from '../ui/Button';
+import UsernameInput, { UsernameInputValidate } from '../inputs/UsernameInput';
+import EmailInput, { EmailInputValidate } from '../inputs/EmailInput';
+import PasswordInput, { PasswordInputValidate } from '../inputs/PasswordInput';
+import ConfirmPasswordInput, { ConfirmPasswordInputValidate } from '../inputs/ConfirmPassowdInput';
 import Input from '../ui/Input';
-import { isValidEmail, isValidPassword } from '@/utils/validatios';
 
 type FormData = {
     username: string;
@@ -12,13 +15,6 @@ type FormData = {
     password: string;
     confirmPassword: string;
     terms: boolean;
-};
-
-type InputConfig = {
-    id: keyof FormData;
-    label: string;
-    type?: string;
-    validation: RegisterOptions<FormData, keyof FormData>
 };
 
 const RegisterForm = () => {
@@ -35,65 +31,6 @@ const RegisterForm = () => {
 
     const password = watch('password');
 
-    const formFields: InputConfig[] = [
-        {
-            id: 'username',
-            label: 'Nombre de usuario',
-            validation: {
-                required: 'El nombre de usuario es requerido',
-                minLength: {
-                    value: 3,
-                    message: 'Mínimo 3 caracteres'
-                },
-                maxLength: {
-                    value: 20,
-                    message: 'Máximo 20 caracteres'
-                }
-            }
-        },
-        {
-            id: 'email',
-            label: 'Correo electrónico',
-            type: 'email',
-            validation: {
-                required: 'El correo es requerido',
-                validate: (email) => {
-                    if (typeof email === "boolean") {
-                        return email
-                    }
-                    return isValidEmail(email) || 'Correo electrónico inválido'
-                },
-            }
-        },
-        {
-            id: 'password',
-            label: 'Contraseña',
-            type: 'password',
-            validation: {
-                required: 'La contraseña es requerida',
-                minLength: {
-                    value: 8,
-                    message: 'Mínimo 8 caracteres'
-                },
-                validate: (password) => {
-                    if (typeof password === 'boolean') {
-                        return password
-                    }
-                    return isValidPassword(password) || 'Debe contener mayúsculas, minúsculas y números'
-                },
-            }
-        },
-        {
-            id: 'confirmPassword',
-            label: 'Confirmar contraseña',
-            type: 'password',
-            validation: {
-                required: 'Confirma tu contraseña',
-                validate: (value) => value === password || 'Las contraseñas no coinciden'
-            }
-        }
-    ];
-
     const onSubmit = async (data: FormData) => {
         // Lógica de registro
         console.log(data);
@@ -102,26 +39,18 @@ const RegisterForm = () => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {formFields.map(({ id, label, type = 'text', validation }) => (
-                <Input
-                    key={id}
-                    id={id}
-                    type={type}
-                    label={label}
-                    error={errors[id]?.message}
-                    {...register(id, { ...validation })}
-                />
-            ))}
+            <UsernameInput errors={errors} {...register('username', UsernameInputValidate)} />
+            <EmailInput errors={errors} {...register('email', EmailInputValidate)} />
+            <PasswordInput errors={errors} {...register('password', PasswordInputValidate)} />
+            <ConfirmPasswordInput errors={errors} {...register('confirmPassword', ConfirmPasswordInputValidate(password))} />
 
             <div className="flex items-center">
-                <input
+                <Input
                     id="terms"
                     type="checkbox"
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                     {...register('terms', {
                         required: 'Debes aceptar los términos y condiciones'
-                    })}
-                />
+                    })} />
                 <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
                     Acepto los{' '}
                     <a href="#" className="text-blue-600 hover:text-blue-500">

@@ -17,6 +17,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     className = '',
     showStrength = false,
     value,
+    type,
     ...props
   }, ref) => {
     const variants = {
@@ -25,12 +26,17 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     };
 
     return (
-      <div className="w-full">
+      <div className={type !== 'checkbox' ? "w-full" : ''}>
         {label && <label className="block text-sm font-medium mb-1 text-gray-700">{label}</label>}
         <input
           ref={ref}
-          className={`w-full px-4 py-3 rounded-lg transition-all ${variants[variant]} ${className} ${error ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
-            }`}
+          type={type}
+          className={
+            type !== 'checkbox'
+              ? `w-full px-4 py-3 rounded-lg transition-all ${variants[variant] || ''} ${className || ''} ${error ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+              }`
+              : 'h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded'
+          }
           value={value}
           {...props}
         />

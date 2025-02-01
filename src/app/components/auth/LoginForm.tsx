@@ -1,22 +1,17 @@
-// components/auth/LoginForm.tsx
 'use client';
 
-import { RegisterOptions, useForm } from 'react-hook-form';
-import Input from '@/app/components/ui/Input';
+import { useForm } from 'react-hook-form';
 import Button from '@/app/components/ui/Button';
-import { isEmpty, isNotUndefined, isValidEmail } from '@/utils/validatios';
+import { isEmpty, isNotUndefined } from '@/utils/validatios';
+import Link from 'next/link';
+import EmailInput, { EmailInputValidate } from '../inputs/EmailInput';
+import PasswordInput, { PasswordInputSoftValidate } from '../inputs/PasswordInput';
+import Input from '../ui/Input';
 
 type FormData = {
     email: string;
     password: string;
     rememberMe: boolean;
-};
-
-type InputConfig = {
-    id: keyof FormData;
-    label: string;
-    type?: string;
-    validation: RegisterOptions<FormData, keyof FormData>
 };
 
 const LoginForm = () => {
@@ -29,35 +24,6 @@ const LoginForm = () => {
 
     const email = watch('email');
     const password = watch('password');
-
-    const formFields: InputConfig[] = [
-        {
-            id: 'email',
-            label: 'Correo electrónico',
-            type: 'email',
-            validation: {
-                required: 'El correo es requerido',
-                validate: (email) => {
-                    if (typeof email === "boolean") {
-                        return email
-                    }
-                    return isValidEmail(email) || 'Correo electrónico inválido'
-                },
-            }
-        },
-        {
-            id: 'password',
-            label: 'Contraseña',
-            type: 'password',
-            validation: {
-                required: 'La contraseña es requerida',
-                minLength: {
-                    value: 8,
-                    message: 'Mínimo 8 caracteres'
-                },
-            }
-        },
-    ];
 
     const disabledBtn = (): boolean => {
         if (!password) {
@@ -74,34 +40,23 @@ const LoginForm = () => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {formFields.map(({ id, label, type = 'text', validation }) => (
-                <Input
-                    key={id}
-                    id={id}
-                    type={type}
-                    label={label}
-                    error={errors[id]?.message}
-                    {...register(id, { ...validation })}
-                />
-            ))}
+            <EmailInput errors={errors} {...register('email', EmailInputValidate)} />
+            <PasswordInput errors={errors} {...register('password', PasswordInputSoftValidate)} />
 
             <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                    <input
+                    <Input
                         id="remember-me"
-                        type="checkbox"
-                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" {
-                            ...register('rememberMe')
-                        }
+                        type="checkbox" 
+                        {...register('rememberMe')}
                     />
+
                     <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
                         Recordarme
                     </label>
                 </div>
 
-                <a href="#" className="text-sm text-blue-600 hover:text-blue-500">
-                    ¿Olvidaste tu contraseña?
-                </a>
+                <Link href="/reset-password" className="text-sm text-blue-600 hover:text-blue-500">¿Olvidaste tu contraseña?</Link>
             </div>
 
             <Button type="submit" variant="primary" size="lg" className="w-full" disabled={disabledBtn()} isLoading={isSubmitting}>
