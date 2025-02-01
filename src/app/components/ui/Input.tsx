@@ -33,7 +33,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           type={type}
           className={
             type !== 'checkbox'
-              ? `w-full px-4 py-3 rounded-lg transition-all ${variants[variant] || ''} ${className || ''} ${error ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+              ? `w-full text-blue-600 px-4 py-3 rounded-lg transition-all ${variants[variant] || ''} ${className || ''} ${error ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
               }`
               : 'h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded'
           }
