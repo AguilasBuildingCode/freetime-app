@@ -8,6 +8,7 @@ import EmailInput, { EmailInputValidate } from '../inputs/EmailInput';
 import PasswordInput, { PasswordInputValidate } from '../inputs/PasswordInput';
 import ConfirmPasswordInput, { ConfirmPasswordInputValidate } from '../inputs/ConfirmPassowdInput';
 import Input from '../ui/Input';
+import { isEmpty, isNotUndefined } from '@/utils/validatios';
 
 type FormData = {
     username: string;
@@ -29,13 +30,29 @@ const RegisterForm = () => {
         }
     });
 
+    const username = watch('username');
+    const email = watch('email');
     const password = watch('password');
+    const confirmPassword = watch('confirmPassword');
+    const terms = watch('terms');
 
     const onSubmit = async (data: FormData) => {
         // Lógica de registro
         console.log(data);
         await new Promise(resolve => setTimeout(resolve, 2000));
     };
+
+    function disabledBtn(): boolean {
+        return isEmpty(username)
+            || isNotUndefined(errors.username)
+            || isEmpty(email)
+            || isNotUndefined(errors.email)
+            || isEmpty(password)
+            || isNotUndefined(errors.password)
+            || isEmpty(confirmPassword)
+            || isNotUndefined(errors.confirmPassword)
+            || !terms;
+    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -71,6 +88,7 @@ const RegisterForm = () => {
                 variant="primary"
                 size="lg"
                 className="w-full"
+                disabled={disabledBtn()}
                 isLoading={isSubmitting}
             >
                 Registrarse

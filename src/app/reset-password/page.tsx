@@ -72,7 +72,7 @@ const ResetPasswordPage = () => {
     }
 
     const disabledBtn = (): boolean => {
-        return isNotUndefined(errors.email) || isEmpty(email);
+        return  isEmpty(email) || isNotUndefined(errors.email) || !isValidEmail(email);
     }
 
     return (

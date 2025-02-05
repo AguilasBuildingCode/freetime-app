@@ -14,7 +14,7 @@ export default function LoginPage() {
           </h2>
           <p className="mt-2 text-sm text-gray-600">
             ¿No tienes cuenta?{' '}
-            <a href="/register" className="font-medium text-blue-600 hover:text-blue-500">
+            <a href="/signup" className="font-medium text-blue-600 hover:text-blue-500">
               Regístrate gratis
             </a>
           </p>
