@@ -20,14 +20,14 @@ export default function LoginPage() {
     formState: { errors, isSubmitting }
   } = useForm<LoginFormData>();
 
-  const onSubmit = async ({ email, password, rememberMe }: LoginFormData) => {
+  const onSubmit = async (loginDormData: LoginFormData) => {
     await new Promise<void>(async resolve => {
       setError('');
       try {
         const formData = new URLSearchParams();
-        formData.append('Email', email);
-        formData.append('Password', password);
-        const res = await fetch('/api/auth/singin', {
+        formData.append('email', loginDormData.email);
+        formData.append('password', loginDormData.password);
+        const res = await fetch('/api/auth/signin', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -39,12 +39,12 @@ export default function LoginPage() {
           throw new Error(`Error WS: ${res.status} ${res.statusText}`)
         }
 
-        if (rememberMe) {
+        if (loginDormData.rememberMe) {
           // ToDo remember me case
-          console.log('rememberMe:', rememberMe)
+          console.log('rememberMe:', loginDormData.rememberMe)
         }
 
-        router.push('/dashbaord')
+        router.push('/dashboard')
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Error desconocido')
       }

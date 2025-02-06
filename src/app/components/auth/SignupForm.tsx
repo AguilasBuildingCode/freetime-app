@@ -2,7 +2,7 @@
 'use client';
 
 import Button from '../ui/Button';
-import UsernameInput, { UsernameInputValidate } from '../inputs/UsernameInput';
+import { NameInputValidate } from '../inputs/NameInput';
 import EmailInput, { EmailInputValidate } from '../inputs/EmailInput';
 import PasswordInput, { PasswordInputValidate } from '../inputs/PasswordInput';
 import ConfirmPasswordInput, { ConfirmPasswordInputValidate } from '../inputs/ConfirmPassowdInput';
@@ -11,9 +11,10 @@ import { isEmpty, isNotUndefined } from '@/utils/validatios';
 import { SignupFormData } from '@/app/types/SignupType';
 import Forms from '@/app/interfaces/FormsInterface';
 import ErrorLabel from '../ui/ErrorLabel';
+import NameInput from '../inputs/NameInput';
 
 const SingupForm = ({
-    username,
+    name,
     email,
     password,
     confirmPassword,
@@ -25,8 +26,8 @@ const SingupForm = ({
 }: SignupFormData & Forms<SignupFormData>) => {
 
     function disabledBtn(): boolean {
-        return isEmpty(username)
-            || isNotUndefined(errors.username)
+        return isEmpty(name)
+            || isNotUndefined(errors.name)
             || isEmpty(email)
             || isNotUndefined(errors.email)
             || isEmpty(password)
@@ -38,7 +39,7 @@ const SingupForm = ({
 
     return (
         <>
-            <UsernameInput errors={errors} {...register('username', UsernameInputValidate)} />
+            <NameInput errors={errors} {...register('name', NameInputValidate)} />
             <EmailInput errors={errors} {...register('email', EmailInputValidate)} />
             <PasswordInput errors={errors} {...register('password', PasswordInputValidate)} />
             <ConfirmPasswordInput errors={errors} {...register('confirmPassword', ConfirmPasswordInputValidate(password))} />

@@ -66,7 +66,7 @@ export default function RegisterPage() {
         <div className="bg-white py-8 px-4 shadow rounded-lg sm:px-10">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <SingupForm
-              username={watch('username')}
+              name={watch('name')}
               email={watch('email')}
               password={watch('password')}
               confirmPassword={watch('confirmPassword')}
