@@ -1,7 +1,6 @@
 // components/auth/RegisterForm.tsx
 'use client';
 
-import { useForm } from 'react-hook-form';
 import Button from '../ui/Button';
 import UsernameInput, { UsernameInputValidate } from '../inputs/UsernameInput';
 import EmailInput, { EmailInputValidate } from '../inputs/EmailInput';
@@ -9,38 +8,21 @@ import PasswordInput, { PasswordInputValidate } from '../inputs/PasswordInput';
 import ConfirmPasswordInput, { ConfirmPasswordInputValidate } from '../inputs/ConfirmPassowdInput';
 import Input from '../ui/Input';
 import { isEmpty, isNotUndefined } from '@/utils/validatios';
+import { SignupFormData } from '@/app/types/SignupType';
+import Forms from '@/app/interfaces/FormsInterface';
+import ErrorLabel from '../ui/ErrorLabel';
 
-type FormData = {
-    username: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-    terms: boolean;
-};
-
-const RegisterForm = () => {
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors, isSubmitting }
-    } = useForm<FormData>({
-        defaultValues: {
-            terms: false
-        }
-    });
-
-    const username = watch('username');
-    const email = watch('email');
-    const password = watch('password');
-    const confirmPassword = watch('confirmPassword');
-    const terms = watch('terms');
-
-    const onSubmit = async (data: FormData) => {
-        // Lógica de registro
-        console.log(data);
-        await new Promise(resolve => setTimeout(resolve, 2000));
-    };
+const SingupForm = ({
+    username,
+    email,
+    password,
+    confirmPassword,
+    terms,
+    error,
+    errors,
+    register,
+    isSubmitting,
+}: SignupFormData & Forms<SignupFormData>) => {
 
     function disabledBtn(): boolean {
         return isEmpty(username)
@@ -55,7 +37,7 @@ const RegisterForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <>
             <UsernameInput errors={errors} {...register('username', UsernameInputValidate)} />
             <EmailInput errors={errors} {...register('email', EmailInputValidate)} />
             <PasswordInput errors={errors} {...register('password', PasswordInputValidate)} />
@@ -80,8 +62,10 @@ const RegisterForm = () => {
                 </label>
             </div>
             {errors.terms && (
-                <p className="mt-1 text-sm text-red-600">{errors.terms.message}</p>
+                <ErrorLabel error={errors.terms.message} />
             )}
+
+            <ErrorLabel error={error} />
 
             <Button
                 type="submit"
@@ -93,8 +77,8 @@ const RegisterForm = () => {
             >
                 Registrarse
             </Button>
-        </form>
+        </>
     );
 };
 
-export default RegisterForm;
+export default SingupForm;

@@ -160,7 +160,7 @@ const TestimonialCard = ({
   author: string;
 }) => (
   <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100">
-    <p className="text-gray-600 mb-4">"{quote}"</p>
+    <p className="text-gray-600 mb-4">{`\"${quote}\"`}</p>
     <p className="font-semibold text-gray-800">– {author}</p>
   </div>
 );
